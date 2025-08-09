@@ -1,0 +1,25 @@
+// providers/auth_provider.dart
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class AuthProvider with ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? user;
+
+  bool get isAuthenticated => user != null;
+
+  AuthProvider() {
+    _auth.authStateChanges().listen((User? firebaseUser) {
+      user = firebaseUser;
+      notifyListeners();
+    });
+  }
+
+  Future<void> signInAnonymously() async {
+    await _auth.signInAnonymously();
+  }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
+  }
+}
